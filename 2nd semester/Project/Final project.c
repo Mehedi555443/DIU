@@ -28,7 +28,8 @@ void user_login();
 void user_panel();
 
 
-void admin_login() {
+void admin_login()
+{
     char exact_username[] = "admin";
     char exact_password[] = "admin";
 
@@ -42,16 +43,19 @@ void admin_login() {
     scanf("%s", username);
 
     printf("Enter Password: ");
-    while (i < maxLength - 1) {
+    while (i < maxLength - 1)
+    {
         ch = getch();
 
         if (ch == 13)
             break;
-        else if (ch == 8 && i > 0) {
+        else if (ch == 8 && i > 0)
+        {
             i--;
             printf("\b \b");
         }
-        else if (ch >= 32 && ch <= 126) {
+        else if (ch >= 32 && ch <= 126)
+        {
             password[i++] = ch;
             printf("*");
         }
@@ -60,10 +64,13 @@ void admin_login() {
     password[i] = '\0';
     printf("\n");
 
-    if (strcmp(username, exact_username) == 0 && strcmp(password, exact_password) == 0) {
+    if (strcmp(username, exact_username) == 0 && strcmp(password, exact_password) == 0)
+    {
         printf("\nLogin successful!\n");
         admin_panel();
-    } else {
+    }
+    else
+    {
         printf("\nIncorrect username or password! Access denied.\n");
     }
 }
@@ -71,23 +78,26 @@ void admin_login() {
 
 typedef struct member
 {
-  int id;
-  char member_name [50];
-  char member_email [100];
-  struct member *next;
-}member;
+    int id;
+    char member_name [50];
+    char member_email [100];
+    struct member *next;
+} member;
 
 member *member_list=NULL;
 
 
-void save_members() {
+void save_members()
+{
     FILE *fp = fopen("members.txt", "w");
-    if (fp == NULL) {
+    if (fp == NULL)
+    {
         printf("Error opening file!\n");
         return;
     }
     member *temp = member_list;
-    while (temp != NULL) {
+    while (temp != NULL)
+    {
         fprintf(fp, "%d,%s,%s\n", temp->id, temp->member_name, temp->member_email);
         temp = temp->next;
     }
@@ -95,15 +105,20 @@ void save_members() {
 }
 
 
-void load_members() {
+void load_members()
+{
     FILE *fp = fopen("members.txt", "r");
     if (!fp) return;
-    while (!feof(fp)) {
+    while (!feof(fp))
+    {
         member *new_member = (member *)malloc(sizeof(member));
-        if (fscanf(fp, "%d,%49[^,],%99[^\n]\n", &new_member->id, new_member->member_name, new_member->member_email) == 3) {
+        if (fscanf(fp, "%d,%49[^,],%99[^\n]\n", &new_member->id, new_member->member_name, new_member->member_email) == 3)
+        {
             new_member->next = member_list;
             member_list = new_member;
-        } else {
+        }
+        else
+        {
             free(new_member);
         }
     }
@@ -111,7 +126,8 @@ void load_members() {
 }
 
 
-void add_members() {
+void add_members()
+{
     member *new_member = (member *)malloc(sizeof(member));
 
     printf("Enter The ID: ");
@@ -121,17 +137,22 @@ void add_members() {
     printf("Enter the e-mail: ");
     scanf(" %[^\n]s", new_member->member_email);
 
-    for (member *temp = member_list; temp != NULL; temp = temp->next) {
-        if (temp->id == new_member->id || strcmp(temp->member_email, new_member->member_email) == 0) {
+    for (member *temp = member_list; temp != NULL; temp = temp->next)
+    {
+        if (temp->id == new_member->id || strcmp(temp->member_email, new_member->member_email) == 0)
+        {
             printf("Member with ID %d or email '%s' already exists!\n", new_member->id, new_member->member_email);
             free(new_member);
             printf("\nDo You Want to Try Adding Another Member?\n1. Yes\n2. No\n");
             int choice;
             printf("Enter Your Choice: ");
             scanf("%d", &choice);
-            if (choice == 1) {
+            if (choice == 1)
+            {
                 add_members();
-            } else {
+            }
+            else
+            {
                 admin_panel();
             }
         }
@@ -148,9 +169,12 @@ void add_members() {
     printf("Enter Your Choice: ");
     scanf("%d", &a);
 
-    if (a == 1) {
+    if (a == 1)
+    {
         add_members();
-    } else {
+    }
+    else
+    {
         admin_panel();
     }
 }
@@ -168,7 +192,8 @@ void display_members()
 
     member* temp = member_list;
 
-    while (temp) {
+    while (temp)
+    {
         printf("ID: %d | Name: %s | Email: %s\n", temp->id, temp->member_name, temp->member_email);
         temp = temp->next;
     }
@@ -176,7 +201,8 @@ void display_members()
     admin_panel();
 }
 
-void delete_members() {
+void delete_members()
+{
     char find[50];
     printf("Enter the name you want to delete: ");
     scanf(" %[^\n]s", find);
@@ -185,11 +211,16 @@ void delete_members() {
     member *prev = NULL;
     int found = 0;
 
-    while (temp != NULL) {
-        if (strcmp(temp->member_name, find) == 0) {
-            if (prev == NULL) {
+    while (temp != NULL)
+    {
+        if (strcmp(temp->member_name, find) == 0)
+        {
+            if (prev == NULL)
+            {
                 member_list = temp->next;
-            } else {
+            }
+            else
+            {
                 prev->next = temp->next;
             }
 
@@ -204,7 +235,8 @@ void delete_members() {
         temp = temp->next;
     }
 
-    if (!found) {
+    if (!found)
+    {
         printf("No member named '%s' found.\n", find);
     }
 
@@ -212,21 +244,25 @@ void delete_members() {
     printf("\nDelete another member?\n1. Yes\n2. No\nEnter choice: ");
     scanf("%d", &choice);
 
-    if (choice == 1) {
+    if (choice == 1)
+    {
         delete_members();
-    } else {
+    }
+    else
+    {
         admin_panel();
     }
 }
 
 
-typedef struct book{
+typedef struct book
+{
 
     char name[50];
     char author[50];
     int id;
     struct book *next;
-}book;
+} book;
 
 typedef struct borrow
 {
@@ -234,19 +270,22 @@ typedef struct borrow
     char author[50];
     int id;
     struct borrow *next;
-}borrow;
+} borrow;
 
 book* start=NULL;
 borrow* head=NULL;
 
-void save_books() {
+void save_books()
+{
     FILE *fp = fopen("books.txt", "w");
-    if (fp == NULL) {
+    if (fp == NULL)
+    {
         printf("Error opening file!\n");
         return;
     }
     book *temp = start;
-    while (temp != NULL) {
+    while (temp != NULL)
+    {
         fprintf(fp, "%d,%s,%s\n", temp->id, temp->name, temp->author);
         temp = temp->next;
     }
@@ -254,15 +293,20 @@ void save_books() {
 }
 
 
-void load_books() {
+void load_books()
+{
     FILE *fp = fopen("books.txt", "r");
     if (!fp) return;
-    while (!feof(fp)) {
+    while (!feof(fp))
+    {
         book *new_book = (book *)malloc(sizeof(book));
-        if (fscanf(fp, "%d,%49[^,],%49[^\n]\n", &new_book->id, new_book->name, new_book->author) == 3) {
+        if (fscanf(fp, "%d,%49[^,],%49[^\n]\n", &new_book->id, new_book->name, new_book->author) == 3)
+        {
             new_book->next = start;
             start = new_book;
-        } else {
+        }
+        else
+        {
             free(new_book);
         }
     }
@@ -270,14 +314,17 @@ void load_books() {
 }
 
 
-void save_borrowed() {
+void save_borrowed()
+{
     FILE *fp = fopen(BORROW_FILE, "w");
-    if (fp == NULL) {
+    if (fp == NULL)
+    {
         printf("Error opening file!\n");
         return;
     }
     borrow *temp = head;
-    while (temp != NULL) {
+    while (temp != NULL)
+    {
         fprintf(fp, "%d,%s,%s\n", temp->id, temp->name, temp->author);
         temp = temp->next;
     }
@@ -285,15 +332,20 @@ void save_borrowed() {
 }
 
 
-void load_borrowed() {
+void load_borrowed()
+{
     FILE *fp = fopen(BORROW_FILE, "r");
     if (!fp) return;
-    while (!feof(fp)) {
+    while (!feof(fp))
+    {
         borrow *new_borrow = (borrow *)malloc(sizeof(borrow));
-        if (fscanf(fp, "%d,%49[^,],%49[^\n]\n", &new_borrow->id, new_borrow->name, new_borrow->author) == 3) {
+        if (fscanf(fp, "%d,%49[^,],%49[^\n]\n", &new_borrow->id, new_borrow->name, new_borrow->author) == 3)
+        {
             new_borrow->next = head;
             head = new_borrow;
-        } else {
+        }
+        else
+        {
             free(new_borrow);
         }
     }
@@ -303,7 +355,8 @@ void load_borrowed() {
 
 void borrowed_history()
 {
-    if (head == NULL) {
+    if (head == NULL)
+    {
         printf("There is no Borrowed Books to Show\n");
         admin_panel();
     }
@@ -311,7 +364,8 @@ void borrowed_history()
     printf("\n========== Borrowed History ==========\n");
 
     borrow* temp = head;
-    while (temp != NULL) {
+    while (temp != NULL)
+    {
         printf("ID: %d | Book Name: %s | Author: %s\n", temp->id, temp->name, temp->author);
         temp = temp->next;
     }
@@ -321,11 +375,13 @@ void borrowed_history()
 
 
 
-void add_books() {
+void add_books()
+{
     book* newbook;
     newbook = (book*)malloc(sizeof(book));
 
-    if (newbook == NULL) {
+    if (newbook == NULL)
+    {
         printf("Memory allocation failed!\n");
         return;
     }
@@ -339,20 +395,24 @@ void add_books() {
 
     int duplicate = 0;
 
-    for (book* temp = start; temp != NULL; temp = temp->next) {
-        if (temp->id == newbook->id) {
+    for (book* temp = start; temp != NULL; temp = temp->next)
+    {
+        if (temp->id == newbook->id)
+        {
             printf("A book with ID %d already exists!\n", newbook->id);
             duplicate = 1;
             break;
         }
-        if (strcmp(temp->name, newbook->name) == 0) {
+        if (strcmp(temp->name, newbook->name) == 0)
+        {
             printf("A book with the name '%s' already exists!\n", newbook->name);
             duplicate = 1;
             break;
         }
     }
 
-    if (duplicate == 0) {
+    if (duplicate == 0)
+    {
         newbook->next = start;
         start = newbook;
         printf("Book '%s' by %s (ID: %d) added successfully!\n", newbook->name, newbook->author, newbook->id);
@@ -368,9 +428,12 @@ void add_books() {
     printf("Enter Your Choice: ");
     scanf("%d", &a);
 
-    if (a == 1) {
+    if (a == 1)
+    {
         add_books();
-    } else {
+    }
+    else
+    {
         admin_panel();
     }
 }
@@ -383,7 +446,8 @@ void search_books()
     printf("Enter The Name of Book, You Want to See Details: ");
     scanf(" %[^\n]s", find);
 
-    if (start == NULL) {
+    if (start == NULL)
+    {
         printf("There is no Book to Show\n");
         admin_panel();
         return;
@@ -392,9 +456,12 @@ void search_books()
     book* temp = start;
     int found = 0;
 
-    while (temp != NULL) {
-        if (strcmp(temp->name, find) == 0) {
-            if (found == 0) {
+    while (temp != NULL)
+    {
+        if (strcmp(temp->name, find) == 0)
+        {
+            if (found == 0)
+            {
                 printf("\n========== Found Item ==========\n");
             }
             printf("ID: %d | Name: %s | Author: %s\n", temp->id, temp->name, temp->author);
@@ -403,7 +470,8 @@ void search_books()
         temp = temp->next;
     }
 
-    if (found == 0) {
+    if (found == 0)
+    {
         printf("Book '%s' not found in the library.\n", find);
     }
 
@@ -415,17 +483,23 @@ void search_books()
     printf("Enter Your Choice: ");
     scanf("%d", &a);
 
-    if (a == 1) {
+    if (a == 1)
+    {
         search_books();
-    } else {
+    }
+    else
+    {
         printf("\n1. Admin Panel\n2. User Panel\n");
         int x;
         printf("Enter Your Choice: ");
         scanf("%d", &x);
 
-        if (x == 1) {
+        if (x == 1)
+        {
             admin_panel();
-        } else if (x == 2) {
+        }
+        else if (x == 2)
+        {
             user_panel();
         }
     }
@@ -480,8 +554,10 @@ void admin_panel()
 }
 
 
-void borrow_books() {
-    if (start == NULL) {
+void borrow_books()
+{
+    if (start == NULL)
+    {
         printf("No books available in the library to borrow.\n");
         user_panel();
     }
@@ -491,11 +567,14 @@ void borrow_books() {
     scanf(" %[^\n]s", find);
 
     book *temp = start;
-    while (temp != NULL) {
-        if (strcmp(temp->name, find) == 0) {
+    while (temp != NULL)
+    {
+        if (strcmp(temp->name, find) == 0)
+        {
             borrow *new_borrow;
             new_borrow = (borrow*)malloc(sizeof(borrow));
-            if (!new_borrow) {
+            if (!new_borrow)
+            {
                 printf("Memory allocation failed!\n");
                 user_panel();
             }
@@ -514,7 +593,8 @@ void borrow_books() {
         temp = temp->next;
     }
 
-    if (temp == NULL) {
+    if (temp == NULL)
+    {
         printf("Book '%s' not found in the library.\n", find);
     }
 
@@ -525,17 +605,22 @@ void borrow_books() {
     printf("Enter Your Choice: ");
     scanf("%d", &a);
 
-    if (a == 1) {
+    if (a == 1)
+    {
         borrow_books();
-    } else {
+    }
+    else
+    {
         user_panel();
     }
 }
 
 
 
-void return_books() {
-    if (head == NULL) {
+void return_books()
+{
+    if (head == NULL)
+    {
         printf("No borrowed books to return.\n");
 
         user_panel();
@@ -548,12 +633,17 @@ void return_books() {
     borrow *temp = head;
     borrow *prev = NULL;
 
-    while (temp != NULL) {
-        if (strcmp(temp->name, find) == 0) {
+    while (temp != NULL)
+    {
+        if (strcmp(temp->name, find) == 0)
+        {
 
-            if (prev == NULL) {
+            if (prev == NULL)
+            {
                 head = temp->next;
-            } else {
+            }
+            else
+            {
                 prev->next = temp->next;
             }
 
@@ -586,7 +676,8 @@ void return_books() {
     }
 }
 
-void user_login() {
+void user_login()
+{
     char create_username[50];
     char create_password[50];
 
@@ -600,14 +691,18 @@ void user_login() {
     int maxLength = sizeof(create_password);
 
     printf("Enter new password: ");
-    while (i < maxLength - 1) {
+    while (i < maxLength - 1)
+    {
         ch = getch();
         if (ch == 13)
             break;
-        else if (ch == 8 && i > 0) {
+        else if (ch == 8 && i > 0)
+        {
             i--;
             printf("\b \b");
-        } else if (ch >= 32 && ch <= 126) {
+        }
+        else if (ch >= 32 && ch <= 126)
+        {
             create_password[i++] = ch;
             printf("*");
         }
@@ -623,20 +718,25 @@ void user_login() {
     printf("====================\n");
 
     int attempts = 3;
-    while (attempts--) {
+    while (attempts--)
+    {
         printf("Enter Username: ");
         scanf("%s", username);
 
         printf("Enter Password: ");
         i = 0;
-        while (i < sizeof(password) - 1) {
+        while (i < sizeof(password) - 1)
+        {
             ch = getch();
             if (ch == 13)
                 break;
-            else if (ch == 8 && i > 0) {
+            else if (ch == 8 && i > 0)
+            {
                 i--;
                 printf("\b \b");
-            } else if (ch >= 32 && ch <= 126) {
+            }
+            else if (ch >= 32 && ch <= 126)
+            {
                 password[i++] = ch;
                 printf("*");
             }
@@ -644,16 +744,20 @@ void user_login() {
         password[i] = '\0';
         printf("\n");
 
-        if (strcmp(username, create_username) == 0 && strcmp(password, create_password) == 0) {
+        if (strcmp(username, create_username) == 0 && strcmp(password, create_password) == 0)
+        {
             printf("\nLogin successful!\n");
             user_panel();
             break;
-        } else {
+        }
+        else
+        {
             printf("\nIncorrect username or password. Attempts left: %d\n", attempts);
         }
     }
 
-    if (attempts < 0) {
+    if (attempts < 0)
+    {
         printf("\nToo many failed attempts. Try again later.\n");
     }
 }
@@ -699,9 +803,9 @@ void user_panel()
 int main()
 {
 
-load_members();
-load_books();
-load_borrowed();
+    load_members();
+    load_books();
+    load_borrowed();
 
     printf("**********Welcome To Our Project**********\n\n");
     printf("==============================\n");
