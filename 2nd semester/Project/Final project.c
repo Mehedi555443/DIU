@@ -419,20 +419,9 @@ void search_books()
     if (start == NULL)
     {
         printf("There are no books in the library.\n");
-        printf("\n1. Admin Panel\n2. User Panel\n");
-        int x;
-        printf("Enter Your Choice: ");
-        scanf("%d", &x);
 
-        if (x == 1)
-        {
-            admin_panel();
-        }
-        else if (x == 2)
-        {
-            user_panel();
-        }
-        return;
+        admin_panel();
+
     }
 
     char find[50];
@@ -474,19 +463,7 @@ void search_books()
     }
     else
     {
-        printf("\n1. Admin Panel\n2. User Panel\n");
-        int x;
-        printf("Enter Your Choice: ");
-        scanf("%d", &x);
-
-        if (x == 1)
-        {
-            admin_panel();
-        }
-        else if (x == 2)
-        {
-            user_panel();
-        }
+        admin_panel();
     }
 }
 
