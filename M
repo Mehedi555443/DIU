@@ -1,0 +1,63 @@
+#include <stdio.h>
+
+#define MAX 100
+
+// Function to sort items in descending order using Bubble Sort
+void bubbleSortDescending(int arr[], int n) {
+    int i, j, temp;
+    for (i = 0; i < n-1; i++) {
+        for (j = 0; j < n-i-1; j++) {
+            if (arr[j] < arr[j+1]) {
+                temp = arr[j];
+                arr[j] = arr[j+1];
+                arr[j+1] = temp;
+            }
+        }
+    }
+}
+
+// Function to perform full bin packing
+void fullBinPacking(int items[], int n, int binCapacity) {
+    int bins[MAX];
+    int binCount = 0;
+
+    for (int i = 0; i < n; i++) {
+        int j;
+        for (j = 0; j < binCount; j++) {
+            if (bins[j] + items[i] <= binCapacity) {
+                bins[j] += items[i];
+                break;
+            }
+        }
+
+        if (j == binCount) {
+            bins[binCount] = items[i];
+            binCount++;
+        }
+    }
+
+    printf("Total bins used: %d\n", binCount);
+    for (int i = 0; i < binCount; i++) {
+        printf("Bin %d used space: %d\n", i+1, bins[i]);
+    }
+}
+
+// Main function
+int main() {
+    int items[MAX], n, binCapacity;
+
+    printf("Enter number of items: ");
+    scanf("%d", &n);
+
+    printf("Enter sizes of items:\n");
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &items[i]);
+    }
+
+    printf("Enter bin capacity: ");
+    scanf("%d", &binCapacity);
+
+    bubbleSortDescending(items, n);
+    fullBinPacking(items, n, binCapacity);
+
+    return 0;
